@@ -58,13 +58,19 @@ export class ImaginarioService {
   }
 
   async registerEventByKeyword(userId: string, keyword: string) {
+    // 1. Limpiamos la palabra: pasamos a minúsculas y eliminamos tildes
+    const sanitizedKeyword = keyword
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
     const events = [
       'sandiego',
       'imaginario',
       'tradicion',
       'medellin',
       'encuentro',
-      'fantasía',
+      'fantasia',
       'magia',
       'alegria',
       'creatividad',
@@ -93,14 +99,16 @@ export class ImaginarioService {
       'puntos',
     ];
 
-    if (!events.includes(keyword)) {
-      throw new NotFoundException('La palabra clave no fué encontrada');
+    // 2. Validamos contra la palabra ya procesada
+    if (!events.includes(sanitizedKeyword)) {
+      throw new NotFoundException('La palabra clave no fue encontrada');
     }
 
+    // 3. Guardamos la versión "limpia" en la base de datos
     const updatedUser = await this.imaginarioModel
       .findByIdAndUpdate(
         userId,
-        { $addToSet: { events: keyword } },
+        { $addToSet: { events: sanitizedKeyword } },
         { returnDocument: 'after' },
       )
       .exec();
