@@ -8,6 +8,7 @@ import { CreateImaginarioDto } from '../dto/create-imaginario.dto';
 import { Imaginario } from '../schemas/imaginario.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { JwtService } from '@nestjs/jwt';
 
 interface MongoError {
   code: number;
@@ -19,16 +20,32 @@ export interface RankingEntry {
   isCurrentUser?: boolean;
 }
 
+export interface LoginResponse {
+  token: string;
+  user: Imaginario;
+}
+
 @Injectable()
 export class ImaginarioService {
   constructor(
     @InjectModel(Imaginario.name) private imaginarioModel: Model<Imaginario>,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async create(createDto: CreateImaginarioDto): Promise<Imaginario> {
+  async create(createDto: CreateImaginarioDto): Promise<LoginResponse> {
     try {
       const newUser = new this.imaginarioModel(createDto);
-      return await newUser.save();
+      const savedUser = await newUser.save();
+
+      const payload = {
+        sub: savedUser._id,
+        user: savedUser,
+      };
+
+      return {
+        token: this.jwtService.sign(payload),
+        user: savedUser,
+      };
     } catch (error) {
       const mongoError = error as MongoError;
       if (mongoError.code === 11000) {
@@ -151,5 +168,9 @@ export class ImaginarioService {
       },
       ...below,
     ];
+  }
+
+  getUserInfo(userId: string) {
+    return this.imaginarioModel.findOne({ _id: userId }).exec();
   }
 }

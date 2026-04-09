@@ -44,4 +44,12 @@ export class ImaginarioController {
       ),
     };
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('user')
+  async getUserInfo(@GetUser('userId') userId: string) {
+    return {
+      user: await this.imaginarioService.getUserInfo(userId),
+    };
+  }
 }
