@@ -15,7 +15,7 @@ interface MongoError {
 }
 
 export interface RankingEntry {
-  child: string;
+  team: string;
   points: number;
   isCurrentUser?: boolean;
 }
@@ -143,7 +143,7 @@ export class ImaginarioService {
         },
         { $sort: { points: 1, _id: -1 } },
         { $limit: 5 },
-        { $project: { child: 1, points: 1 } },
+        { $project: { team: 1, points: 1 } },
       ])
       .exec()) as RankingEntry[];
 
@@ -163,14 +163,14 @@ export class ImaginarioService {
         },
         { $sort: { points: -1, _id: 1 } },
         { $limit: 5 },
-        { $project: { child: 1, points: 1 } },
+        { $project: { team: 1, points: 1 } },
       ])
       .exec()) as RankingEntry[];
 
     return [
       ...above.reverse(),
       {
-        child: currentUser.child,
+        team: currentUser.team,
         points: userPoints,
         isCurrentUser: true,
       },

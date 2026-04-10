@@ -15,7 +15,7 @@ export class Imaginario {
   fullName: string;
 
   @Prop()
-  child: string;
+  team: string;
 
   @Prop({ type: [String], default: [] })
   events: string[];

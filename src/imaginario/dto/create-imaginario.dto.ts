@@ -19,5 +19,5 @@ export class CreateImaginarioDto {
 
   @IsString()
   @IsNotEmpty()
-  child: string;
+  team: string;
 }
