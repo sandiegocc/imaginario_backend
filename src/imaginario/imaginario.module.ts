@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Imaginario, ImaginarioSchema } from './schemas/imaginario.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailchimpModule } from '../mailchimp/mailchimp.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '365d' },
       }),
     }),
+    MailchimpModule,
   ],
   controllers: [ImaginarioController],
   providers: [ImaginarioService],

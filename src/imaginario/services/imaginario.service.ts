@@ -9,6 +9,7 @@ import { Imaginario } from '../schemas/imaginario.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
+import { MailchimpService } from '../../mailchimp/services/mailchimp.service';
 
 interface MongoError {
   code: number;
@@ -30,6 +31,7 @@ export class ImaginarioService {
   constructor(
     @InjectModel(Imaginario.name) private imaginarioModel: Model<Imaginario>,
     private readonly jwtService: JwtService,
+    private readonly mailchimpService: MailchimpService,
   ) {}
 
   async create(createDto: CreateImaginarioDto): Promise<LoginResponse> {
@@ -41,6 +43,11 @@ export class ImaginarioService {
         sub: savedUser._id,
         user: savedUser,
       };
+
+      await this.mailchimpService.addSubscriber(
+        newUser.email,
+        newUser.fullName,
+      );
 
       return {
         token: this.jwtService.sign(payload),
