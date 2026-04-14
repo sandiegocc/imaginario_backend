@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { MailchimpService } from '../../mailchimp/services/mailchimp.service';
+import { events } from './events';
 
 interface MongoError {
   code: number;
@@ -64,58 +65,26 @@ export class ImaginarioService {
     }
   }
 
-  async registerEventByKeyword(userId: string, keyword: string) {
+  async registerEventByKeyword(userId: string, event: string, keyword: string) {
     // 1. Limpiamos la palabra: pasamos a minúsculas y eliminamos tildes
     const sanitizedKeyword = keyword
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
 
-    const events = [
-      'robotica',
-      'futuro',
-      'amigos',
-      'cocinar',
-      'caricatura',
-      'tarjeta',
-      'milonga',
-      'dibujo',
-      'plastilina',
-      'imaginar',
-      'fabrica',
-      'manillas',
-      'deporte',
-      'hogar',
-      'tecnologia',
-      'ciencia',
-      'cultura',
-      'arte',
-      'respeto',
-      'ilustrar',
-      'movimiento',
-      'caricatura',
-      '3d',
-      'mundo',
-      'verde',
-      'pintura',
-      'porcelana',
-      'saltar',
-      'crear',
-      'huerta',
-      'interactivo',
-      'leer',
-      'personajes',
-      'teatro',
-      'historias',
-      'musica',
-      'familia',
-      'artistas',
-      'figuras',
-    ];
+    const locatedEvent = events.find(
+      (e) => e.url.toLowerCase() === event.toLowerCase(),
+    );
+
+    if (!locatedEvent) {
+      throw new NotFoundException('No se encontró el evento');
+    }
 
     // 2. Validamos contra la palabra ya procesada
-    if (!events.includes(sanitizedKeyword)) {
-      throw new NotFoundException('La palabra clave no fue encontrada');
+    if (locatedEvent.keyword !== sanitizedKeyword) {
+      throw new NotFoundException(
+        'La palabra clave no es la correcta. Intentalo de nuevo',
+      );
     }
 
     // 3. Guardamos la versión "limpia" en la base de datos

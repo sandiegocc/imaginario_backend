@@ -40,6 +40,7 @@ export class ImaginarioController {
     return {
       events: await this.imaginarioService.registerEventByKeyword(
         userId,
+        payload.event,
         payload.keyword,
       ),
     };
