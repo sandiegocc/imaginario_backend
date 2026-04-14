@@ -66,8 +66,9 @@ export class ImaginarioService {
   }
 
   async registerEventByKeyword(userId: string, event: string, keyword: string) {
-    // 1. Limpiamos la palabra: pasamos a minúsculas y eliminamos tildes
+    // 1. Limpiamos la palabra: quitamos espacios, pasamos a minúsculas y eliminamos tildes
     const sanitizedKeyword = keyword
+      .trim()
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
