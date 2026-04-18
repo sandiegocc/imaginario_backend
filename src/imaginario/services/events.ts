@@ -203,7 +203,7 @@ export const events = [
     ally: 'High Tech Institute',
     description:
       'Es una experiencia acompañada (1 persona de HTI) donde hay 2 robot sobre una pista (Laberinto) y el/la niñ@ debe realizar una misión. Ejemplo Wall-e y reciclaje',
-    keyword: 'tecnología',
+    keyword: 'tecnologia',
     url: 'taller-de-robotica',
     cardColor: 'verde-oliva',
     eventBg: '/assets/fabrica-de-robots.png',
