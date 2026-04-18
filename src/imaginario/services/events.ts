@@ -148,7 +148,7 @@ export const events = [
     ally: 'Fábrica de amigos imaginarios',
     description:
       'Estación donde los niños inventan y construyen su propio personaje imaginario utilizando foamy moldeable y materiales de creación. Cada figura representa una historia y personalidad creada por el participante.\nParticipación libre. Público: niños 4–12 años.',
-    keyword: 'fábrica',
+    keyword: 'fabrica',
     url: 'taller-fabrica-amigos-imaginarios-1',
     cardColor: 'verde',
     eventBg: '/assets/fabrica-de-amigos-imaginarios.png',
@@ -490,7 +490,7 @@ export const events = [
     location: 'plaza Jardin',
     ally: 'Red de musica',
     description: '',
-    keyword: 'música',
+    keyword: 'musica',
     url: 'presentacion-red-musica-medellin',
     cardColor: 'verde',
     eventBg: '/assets/fabrica-de-robots.png',
